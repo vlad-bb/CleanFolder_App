@@ -1,52 +1,20 @@
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-# ось цей словник можливо отримувати із зовнішнього середовища
-# і при цьому не доведеться змінювати код програми)
-REGISTER_EXTENSIONS = {
-    ".JPEG": "images",
-    ".JPG": "images",
-    ".PNG": "images",
-    ".SVG": "images",
-    ".GIF": "images",
-    ".MP3": "audio",
-    ".OGG": "audio",
-    ".WAV": "audio",
-    ".AMR": "audio",
-    ".MP4": "video",
-    ".AVI": "video",
-    ".MOV": "video",
-    ".MKV": "video",
-    ".DOC": "document",
-    ".DOCX": "document",
-    ".TXT": "document",
-    ".PDF": "document",
-    ".XLSX": "document",
-    ".XLS": "document",
-    ".CSV": "document",
-    ".PPTX": "document",
-    ".ZIP": "archives",
-    ".GZ": "archives",
-    ".TAR": "archives",
-    ".RAR": "archives",
-    ".ARJ": "archives",
-    ".APP": "programs",
-    ".PY": "programs",
-    ".HTML": "programs",
-    "": "other",
-}
+from register_extensions import REGISTER_EXTENSIONS
 
 
 def sorter(folder) -> Dict[Tuple[str, str], List[Path]]:
     file_list = sorted(folder.glob("**/*"))
     result = {}
     for file in [files for files in file_list if files.is_file()]:
-        ext = file.suffix.upper()
+        ext = file.suffix[1:].upper()
         file_type = REGISTER_EXTENSIONS.get(ext, "other")
         if result.get((ext, file_type)):
             result[(ext, file_type)].append(file)
         else:
             result[(ext, file_type)] = [file]
+    print(result)
     return result
 
 
@@ -107,13 +75,14 @@ def file_parser(*args):
         "\n"
         f"Files in {args[0]} sorted succesffully"
         "\n"
+        f"Folders that are deleted: {str_positive}"
+        "\n"
+        f"Folders that are not deleted:{str_negative}"
+        "\n"
         f"{star}"
-        "\n"
-        f"folders that are deleted: {str_positive}"
-        "\n"
-        f"folders that are not deleted:{str_negative}"
     )
 
 
 if __name__ == "__main__":
-    print(file_parser(Path(r"d:\testfolder")))
+    # print(file_parser(Path(r"d:\testfolder")))
+    print(file_parser(Path('/Users/admin/Desktop/test')))
