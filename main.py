@@ -94,11 +94,11 @@ if __name__ == "__main__":
     timer_1 = time()
     with ThreadPoolExecutor(max_workers=2) as executor:
         executor.submit(file_parser, Path('/Users/admin/Desktop/test_thr_2'))
-        print(f'Speed test work with Pool Threads = 2 {round(time() - timer_1, 4)}')
+        print(f'Speed test work with Pool (2 Threads) = {round(time() - timer_1, 4)}')
 
     """ Speed test work with Pool Threads = 4 """
     timer_2 = time()
     with ThreadPoolExecutor(max_workers=4) as executor:
         executor.submit(file_parser, Path('/Users/admin/Desktop/test_thr_4'))
-        print(f'Speed test work with Pool Threads = 4 {round(time() - timer_2, 4)}')
+        print(f'Speed test work with Pool (4 Threads) = {round(time() - timer_2, 4)}')
 
