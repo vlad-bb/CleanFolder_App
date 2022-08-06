@@ -3,7 +3,6 @@
  - будуть створюватись нові теки під файли з новими розширеннями
 """
 
-
 REGISTER_EXTENSIONS = {
     "JPEG": "images",
     "JPG": "images",
@@ -34,5 +33,14 @@ REGISTER_EXTENSIONS = {
     "APP": "programs",
     "PY": "programs",
     "HTML": "programs",
+    "BIN": "programs",
+    "DAT": "programs",
+    "JSON": "programs",
+    "XLM": "programs",
+    "PKG": "programs",
+    "JS": "programs",
+    "YML": "programs",
+    "YAML": "programs",
+    "MD": "programs",
     "": "other",
 }
