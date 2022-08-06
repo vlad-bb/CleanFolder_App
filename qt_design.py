@@ -10,8 +10,21 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from main import file_parser
 from time import time
+from tqdm import tqdm
+from pathlib import Path
 
 folder = ''
+start_flag = True
+
+
+def welcome():
+    if start_flag:
+        ui.textBrowser.setText(f'Welcome to CleanFolder'
+                               '\n'
+                               'This app is for organizing files in your folders'
+                               '\n'
+                               'For Start app - click button ...')
+
 
 
 def get_path():
@@ -23,8 +36,17 @@ def get_path():
 logs = ''
 
 
+# def bar():
+#     pbar = tqdm(sorted(Path(folder).glob("**/*")))
+#     for char in pbar:
+#         ui.textBrowser.setText(pbar.set_description("Processing %s" % char))
+
+
 def click():
+    global start_flag
+    start_flag = False
     if folder != '':
+        # bar()
         timer = time()
         file_parser(folder)
         ui.textBrowser.setText(f'Files in {folder} sorted succesffully'
@@ -74,10 +96,10 @@ class Ui_MainWindow(object):
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(click)
 
-        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(20, 120, 401, 23))
-        self.progressBar.setProperty("value", 24)
-        self.progressBar.setObjectName("progressBar")
+        # self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        # self.progressBar.setGeometry(QtCore.QRect(20, 120, 401, 30))
+        # self.progressBar.setProperty("value", 0)
+        # self.progressBar.setObjectName("progressBar")
 
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
         self.textBrowser.setGeometry(QtCore.QRect(40, 150, 371, 161))
@@ -109,6 +131,8 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Start"))
 
 
+
+
 if __name__ == "__main__":
     import sys
 
@@ -117,5 +141,7 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    welcome()
+
 
     sys.exit(app.exec_())
