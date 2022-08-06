@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Dict, List, Tuple
-
+from concurrent.futures import ThreadPoolExecutor
+from time import time
 from register_extensions import REGISTER_EXTENSIONS
 
 
@@ -84,5 +85,20 @@ def file_parser(*args):
 
 
 if __name__ == "__main__":
-    # print(file_parser(Path(r"d:\testfolder")))
+    """ Speed test work with 1 Thread """
+    timer = time()
     print(file_parser(Path('/Users/admin/Desktop/test')))
+    print(f'Speed test work with 1 Thread {round(time() - timer, 4)}')
+
+    """ Speed test work with Pool Threads = 2 """
+    timer_1 = time()
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        executor.submit(file_parser, Path('/Users/admin/Desktop/test_thr_2'))
+        print(f'Speed test work with Pool Threads = 2 {round(time() - timer_1, 4)}')
+
+    """ Speed test work with Pool Threads = 4 """
+    timer_2 = time()
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        executor.submit(file_parser, Path('/Users/admin/Desktop/test_thr_4'))
+        print(f'Speed test work with Pool Threads = 4 {round(time() - timer_2, 4)}')
+
