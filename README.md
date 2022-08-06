@@ -6,7 +6,7 @@ The results of speed in different work programm shows as multi-threaded programm
 </p>
 <h3>Test data</h3>
     <ul>Folder size: 151,7 MB</ul>
-    <ul>Speed test work with 1 Thread 0.0749 sec</ul>
-    <ul>Speed test work with Pool Threads = 2 0.0018 sec</ul>
-    <ul>Speed test work with Pool Threads = 4 0.0007 sec</ul>
+    <ul>Speed test work with 1 Thread = 0.0749 sec</ul>
+    <ul>Speed test work with Pool (2 Threads) = 0.0018 sec</ul>
+    <ul>Speed test work with Pool (4 Threads) = 0.0007 sec</ul>
 
