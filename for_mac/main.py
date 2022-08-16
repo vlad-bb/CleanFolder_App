@@ -1,32 +1,38 @@
+import asyncio
 from pathlib import Path
+
+from aiopath import AsyncPath
 from typing import Dict, List, Tuple
-from concurrent.futures import ThreadPoolExecutor
 from time import time
 from register_extensions import REGISTER_EXTENSIONS
 
 
-def sorter(folder) -> Dict[Tuple[str, str], List[Path]]:
+def get_file_list(folder):
     file_list = sorted(folder.glob("**/*"))
-    result = {}
+    return file_list
+
+
+async def sorter(folder) -> Dict[Tuple[str, str], List[AsyncPath]]:
+    file_list = get_file_list(folder)
+    result_dict = {}
     for file in [files for files in file_list if files.is_file()]:
         ext = file.suffix[1:].upper()
         file_type = REGISTER_EXTENSIONS.get(ext, "other")
-        if result.get((ext, file_type)):
-            result[(ext, file_type)].append(file)
+        if result_dict.get((ext, file_type)):
+            result_dict[(ext, file_type)].append(file)
         else:
-            result[(ext, file_type)] = [file]
-    print(result)
-    return result
+            result_dict[(ext, file_type)] = [file]
+    return result_dict
 
 
-def get_bad_folders(folder: Path) -> List[Path]:
+def get_bad_folders(folder: AsyncPath) -> List[AsyncPath]:
     folder_list = [
         folder
         for folder in folder.glob("*")
         if folder.is_dir() and folder.name not in set(REGISTER_EXTENSIONS.values())
     ]
 
-    bad_folders_list = [list(folder.glob("**/*")) for folder in folder_list]
+    bad_folders_list = [list(Path(folder).glob("**/*")) for folder in folder_list]
     for lst in bad_folders_list:
         if lst:
             folder_list.extend(lst)
@@ -34,7 +40,7 @@ def get_bad_folders(folder: Path) -> List[Path]:
     return folder_list
 
 
-def remove_folders(folders: List[Path]):
+def remove_folders(folders: List[AsyncPath]):
     positiv_result = []
     negativ_result = []
     for folder in folders[::-1]:
@@ -46,14 +52,13 @@ def remove_folders(folders: List[Path]):
     return positiv_result, negativ_result
 
 
-def file_parser(*args):
+async def file_parser(folder_for_scan):
     star = "*" * 60
     try:
-        folder_for_scan = Path(args[0])
-        sorted_file_dict = sorter(folder_for_scan.resolve())
+        sorted_file_dict = await sorter(folder_for_scan)
     except FileNotFoundError:
         return (
-            f"Not able to find '{args[0]}' folder. Please enter a correct folder name."
+            f"Not able to find '{folder_for_scan}' folder. Please enter a correct folder name."
         )
     except IndexError:
         return "Please enter a folder name."
@@ -71,10 +76,10 @@ def file_parser(*args):
     positive, negative = remove_folders(old_folder_list)
     str_positive = "\n".join(positive)
     str_negative = "\n".join(negative)
-    return (
+    print(
         f"{star}"
         "\n"
-        f"Files in {args[0]} sorted succesffully"
+        f"Files in {folder_for_scan} sorted succesffully"
         "\n"
         f"Folders that are deleted: {str_positive}"
         "\n"
@@ -84,21 +89,13 @@ def file_parser(*args):
     )
 
 
+async def main(path):
+    path = Path(path).resolve()
+    await asyncio.gather(file_parser(path), return_exceptions=False)
+
+
 if __name__ == "__main__":
-    """ Speed test work with 1 Thread """
+    """ Speed test work with asyncio """
     timer = time()
-    print(file_parser(Path('/Users/admin/Desktop/test')))
-    print(f'Speed test work with 1 Thread {round(time() - timer, 4)}')
-
-    """ Speed test work with Pool Threads = 2 """
-    timer_1 = time()
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        executor.submit(file_parser, Path('/Users/admin/Desktop/test_thr_2'))
-        print(f'Speed test work with Pool (2 Threads) = {round(time() - timer_1, 4)}')
-
-    """ Speed test work with Pool Threads = 4 """
-    timer_2 = time()
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        executor.submit(file_parser, Path('/Users/admin/Desktop/test_thr_4'))
-        print(f'Speed test work with Pool (4 Threads) = {round(time() - timer_2, 4)}')
-
+    asyncio.run(main('/Users/admin/Desktop/test'))
+    print(f'Speed test work with asyncio {round(time() - timer, 4)}')
