@@ -4,6 +4,8 @@
 <p>In this project I use single-threaded and multi-threaded programming.</p>
 <p>The results of speed in different work programm shows as multi-threaded programming is more faster than single-threaded.</p>
 
+![Image](https://github.com/vlad-bb/CleanFolder_App/blob/main/project_helpme_assistance.png)
+
 <h3>Test data</h3>
     <ul>Folder size: 151,7 MB</ul>
     <ul>Speed test work with 1 Thread = 0.0749 sec</ul>
